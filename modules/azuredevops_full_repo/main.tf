@@ -1,20 +1,11 @@
-terraform {
-  required_providers {
-    azuredevops = {
-      source = "microsoft/azuredevops"
-      version = "~>0.6.0" #atualiza apenas 0.6.x
-    }
-  }
-}
-
 resource "azuredevops_project" "project" {
-  name = "My Awesome Project"
-  description  = "All of my awesomee things"
+  name = "${var.prefix}-prj"
+  description  = "${var.description}"
 }
 
 resource "azuredevops_git_repository" "repository" {
   project_id = azuredevops_project.project.id
-  name       = "My Awesome Repo"
+  name       = "${var.prefix}-repo"
   initialization {
     init_type = "Clean"
   }
@@ -22,7 +13,7 @@ resource "azuredevops_git_repository" "repository" {
 
 resource "azuredevops_build_definition" "build_definition" {
   project_id = azuredevops_project.project.id
-  name       = "My Awesome Build Pipeline"
+  name       = "${var.prefix}-pipe"
   path       = "\\"
 
   repository {
